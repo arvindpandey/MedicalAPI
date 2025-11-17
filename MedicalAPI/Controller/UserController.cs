@@ -11,7 +11,7 @@ namespace MedicalAPI.Controller
     public class UserController : ControllerBase
     {
         private readonly IUserBL _userBL;
-
+        //This is for User Controller
         public UserController(IUserBL userBL)
         {
             _userBL = userBL;
