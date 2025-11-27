@@ -1,8 +1,11 @@
-﻿using MedicalAPI.Interface;
+﻿using MedicalAPI.BusinessLogic;
 using MedicalAPI.MedicalEntity;
+using MedicalAPI.Miscellaneous;
 using MedicalAPI.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+
 
 namespace MedicalAPI.Controller
 {
@@ -10,38 +13,45 @@ namespace MedicalAPI.Controller
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserBL _userBL;
-        //This is for User Controller
-        public UserController(IUserBL userBL)
+        private readonly IUserBL userBL;
+        GlobalResponse glRespose = new GlobalResponse();
+        public UserController(IUserBL _userBL)
         {
-            _userBL = userBL;
+            userBL = _userBL;
         }
-
         [HttpGet]
-        public IActionResult GetAllUsers()
+        [Route("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers()
         {
-            var users = _userBL.GetAllUsers();
-            return Ok(users);
-
+            glRespose.ReponseData = await userBL.GetAll();
+            if (glRespose.ReponseData == null || glRespose.ReponseData == "")
+                return NotFound("No users found.");
+            else
+                glRespose.Response_Message = "Record All fetch Successfully";
+            return Ok(glRespose);
         }
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
+        [HttpGet]
+        [Route("GetDataByID")]
+        public async Task<IActionResult> AddUserRecord(int ID)
         {
-            var user = _userBL.GetUserById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
+            glRespose.ReponseData = await userBL.GetAllByUserID(ID);
+            if (glRespose.ReponseData == null || glRespose.ReponseData == "")
+                return NotFound("No users found.");
+            else
+                glRespose.Response_Message = "Record fetch Successfully by Userid : " + ID;
+            return Ok(glRespose);
         }
-
         [HttpPost]
-        public IActionResult AddUser(TblUser userModel)
+        [Route("AddUser")]
+        public async Task<IActionResult> AddUserRecord(UserModel _uM)
         {
-            _userBL.AddUser(userModel);
-            return CreatedAtAction(nameof(GetUserById), new { id = userModel.UserId }, userModel);
+            glRespose.ReponseData = await userBL.Adds(_uM);
+            if (glRespose.ReponseData == null || glRespose.ReponseData == "")
+                return NotFound("No users found.");
+            else
+                glRespose.Response_Message = "Record Save Successfully";
+            return Ok(glRespose);
         }
-
-
+        
     }
 }

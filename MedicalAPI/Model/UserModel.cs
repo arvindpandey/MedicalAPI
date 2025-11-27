@@ -4,7 +4,7 @@
     {
         public int UserId { get; set; }
 
-        public string? LoginName { get; set; }
+        public string? Name { get; set; }
 
         public string? UserPassword { get; set; }
 
