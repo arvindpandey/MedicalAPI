@@ -32,7 +32,7 @@ namespace MedicalAPI.Controller
         }
         [HttpGet]
         [Route("GetDataByID")]
-        public async Task<IActionResult> AddUserRecord(int ID)
+        public async Task<IActionResult> GetAllByUserID(int ID)
         {
             glRespose.ReponseData = await userBL.GetAllByUserID(ID);
             if (glRespose.ReponseData == null || glRespose.ReponseData == "")
@@ -45,13 +45,26 @@ namespace MedicalAPI.Controller
         [Route("AddUser")]
         public async Task<IActionResult> AddUserRecord(UserModel _uM)
         {
-            glRespose.ReponseData = await userBL.Adds(_uM);
-            if (glRespose.ReponseData == null || glRespose.ReponseData == "")
-                return NotFound("No users found.");
-            else
-                glRespose.Response_Message = "Record Save Successfully";
-            return Ok(glRespose);
+            glRespose.Response_Message = await userBL.Adds(_uM); 
+
+            return Ok(glRespose.Response_Message);
         }
-        
+        [HttpPost]
+        [Route("UpdateUser")]
+        public async Task<IActionResult> UdpateUserRecord(UserModel _uM)
+        {
+            glRespose.Response_Message = await userBL.Update(_uM);
+
+            return Ok(glRespose.Response_Message);
+        } 
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            glRespose.Response_Message = await userBL.DeleteRecord(id);
+
+            return Ok(glRespose.Response_Message);
+        }
+
     }
 }

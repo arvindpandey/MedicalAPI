@@ -1,4 +1,5 @@
-﻿using MedicalAPI.MedicalCore;
+﻿using Management.Model.ResponseModel;
+using MedicalAPI.MedicalCore;
 using MedicalAPI.MedicalEntity;
 using MedicalAPI.Model;
 using Microsoft.EntityFrameworkCore;
@@ -67,26 +68,36 @@ namespace MedicalAPI.BusinessLogic
 
             try
             {
-                var entity = new TblUser
+                var CheckAlreayExist = await unitOfWork.RepoMedicalDBContext.TblUsers.Where(x => x.UserMobileNo == _usermodel.UserMobileNo || x.UserAadharCard == _usermodel.UserAadharCard).FirstOrDefaultAsync();
+
+                if (string.IsNullOrWhiteSpace(CheckAlreayExist.UserAadharCard) || CheckAlreayExist.UserMobileNo == 0)
                 {
-                    LoginName = _usermodel.Name,
-                    UserPassword = _usermodel.UserPassword,
-                    UserFirstName = _usermodel.UserFirstName,
-                    UserMiddleName = _usermodel.UserMiddleName,
-                    UserLastName = _usermodel.UserLastName,
-                    UserGender = _usermodel.UserGender,
-                    UserSpecialization = _usermodel.UserSpecialization,
-                    UserMobileNo = _usermodel.UserMobileNo,
-                    UserAge = _usermodel.UserAge,
-                    UserAadharCard = _usermodel.UserAadharCard,
-                    UserIsActive = _usermodel.UserIsActive,
-                    UserCreateDate = DateTime.Now
-                };
 
-                medicalDbContext.Add(entity);
-                await medicalDbContext.SaveChangesAsync();
+                    var entity = new TblUser
+                    {
+                        LoginName = _usermodel.Name,
+                        UserPassword = Encryption.Encrypt(_usermodel.UserPassword),
+                        UserFirstName = _usermodel.UserFirstName,
+                        UserMiddleName = _usermodel.UserMiddleName,
+                        UserLastName = _usermodel.UserLastName,
+                        UserGender = _usermodel.UserGender,
+                        UserRoleId = _usermodel.RoleID,
+                        UserMobileNo = _usermodel.UserMobileNo,
+                        UserAge = _usermodel.UserAge,
+                        UserAadharCard = _usermodel.UserAadharCard,
+                        UserIsActive = _usermodel.UserIsActive,
+                        UserCreateDate = DateTime.Now
+                    };
 
-                return "Record saved successfully";
+                    medicalDbContext.Add(entity);
+                    await medicalDbContext.SaveChangesAsync();
+
+                    return "Record saved successfully";
+                }
+                else
+                {
+                    return "Record already Exist";
+                }
             }
             catch (Exception ex)
             {
@@ -94,12 +105,60 @@ namespace MedicalAPI.BusinessLogic
             }
 
         }
-         
+
+        //update   
+        public async Task<string> Update(UserModel _usermodel)
+        {
+            try
+            {
+                var users = await medicalDbContext.TblUsers.FirstOrDefaultAsync(x => x.UserId == _usermodel.UserId);
+                if (users == null)
+                {
+                    return "Record Not Found";
+                }
+                users.LoginName = _usermodel.Name;
+                users.UserPassword = _usermodel.UserPassword;
+                users.UserFirstName = _usermodel.UserFirstName;
+                users.UserMiddleName = _usermodel.UserMiddleName;
+                users.UserLastName = _usermodel.UserLastName;
+                users.UserGender = _usermodel.UserGender;
+                users.UserRoleId = _usermodel.RoleID;
+                users.UserMobileNo = _usermodel.UserMobileNo;
+                users.UserAge = _usermodel.UserAge;
+                users.UserModifiedDate = DateTime.Now;
+                users.UserAadharCard = _usermodel.UserAadharCard;
+                users.UserIsActive = _usermodel.UserIsActive;
+
+                await medicalDbContext.SaveChangesAsync();
+
+                return "record Updated Successfully";
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        public async Task<string> DeleteRecord(int id)
+        {
+            var users = await medicalDbContext.TblUsers.FirstAsync(x => x.UserId == id);
+
+            if (users == null)
+            {
+                return "Record Not Found";
+            }
+            medicalDbContext.Remove(users);
+            await medicalDbContext.SaveChangesAsync();
+            return "record Deleted Successfully";
+        }
+
     }
     public interface IUserBL
     {
         Task<IEnumerable<UserModel>> GetAll();
         Task<String> Adds(UserModel _usermodel);
         Task<UserModel> GetAllByUserID(int ID);
+        Task<string> Update(UserModel _usermodel);
+        Task<string> DeleteRecord(int id);
     }
 }

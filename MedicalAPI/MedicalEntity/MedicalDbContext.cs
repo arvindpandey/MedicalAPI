@@ -23,6 +23,10 @@ public partial class MedicalDbContext : DbContext
 
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
+    public virtual DbSet<UserRole> UserRoles { get; set; }
+
+    public virtual DbSet<UserRoleRel> UserRoleRels { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=DESKTOP-B30V5FQ;Initial Catalog=MedicalDB;User ID=sa;Encrypt=false;TrustServerCertificate=true;Password=sql@123");
@@ -96,6 +100,10 @@ public partial class MedicalDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.UserCreateDate).HasColumnType("datetime");
+            entity.Property(e => e.UserEmailId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("UserEmailID");
             entity.Property(e => e.UserFirstName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -104,8 +112,8 @@ public partial class MedicalDbContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength();
             entity.Property(e => e.UserLastName)
-                .HasMaxLength(10)
-                .IsFixedLength();
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.UserMiddleName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -113,9 +121,36 @@ public partial class MedicalDbContext : DbContext
             entity.Property(e => e.UserPassword)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.UserSpecialization)
-                .HasMaxLength(50)
+            entity.Property(e => e.UserPasswordExpiryDate).HasColumnType("datetime");
+            entity.Property(e => e.UserRoleId).HasColumnName("UserRoleID");
+        });
+
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasKey(e => e.Urid);
+
+            entity.Property(e => e.Urid).HasColumnName("URID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.RoleDescription)
+                .HasMaxLength(500)
                 .IsUnicode(false);
+            entity.Property(e => e.RoleName)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<UserRoleRel>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("UserRole_Rel");
+
+            entity.Property(e => e.Urid).HasColumnName("URID");
+            entity.Property(e => e.Urrid)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("URRID");
+            entity.Property(e => e.Userid).HasColumnName("USERID");
         });
 
         OnModelCreatingPartial(modelBuilder);

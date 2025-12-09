@@ -14,7 +14,7 @@
 
         public string? UserLastName { get; set; }
 
-        public string? UserSpecialization { get; set; }
+        public int? RoleID { get; set; }
 
         public string? UserGender { get; set; }
 

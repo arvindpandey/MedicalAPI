@@ -7,6 +7,8 @@ public partial class TblUser
 {
     public int UserId { get; set; }
 
+    public int? UserRoleId { get; set; }
+
     public string? LoginName { get; set; }
 
     public string? UserPassword { get; set; }
@@ -17,13 +19,15 @@ public partial class TblUser
 
     public string? UserLastName { get; set; }
 
-    public string? UserSpecialization { get; set; }
+    public string? UserEmailId { get; set; }
 
     public string? UserGender { get; set; }
 
     public long? UserMobileNo { get; set; }
 
     public int? UserAge { get; set; }
+
+    public DateTime? UserPasswordExpiryDate { get; set; }
 
     public string? UserAadharCard { get; set; }
 
