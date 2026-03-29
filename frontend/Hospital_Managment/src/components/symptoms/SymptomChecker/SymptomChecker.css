@@ -1,0 +1,100 @@
+/* ============================================================
+   SymptomChecker.css
+   Styles for the main SymptomChecker page layout
+   ============================================================ */
+
+/* Page wrapper — fills available space below the top navbar */
+.symptom-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  padding: 20px 24px;
+  box-sizing: border-box;
+  background-color: #f8fafc;
+}
+
+/* Page title */
+.symptom-page__title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a2b4a;
+  margin: 0 0 4px 0;
+}
+
+/* Subtitle below title */
+.symptom-page__subtitle {
+  font-size: 13px;
+  color: #647484;
+  margin: 0 0 16px 0;
+}
+
+/* Row containing patient selector + age input */
+.symptom-page__selectors {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+/* Patient dropdown */
+.symptom-page__patient-select {
+  flex: 2;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 0.5px solid #d1d5db;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+}
+
+/* Age input */
+.symptom-page__age-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 0.5px solid #d1d5db;
+  font-size: 13px;
+}
+
+/* Scrollable chat history area */
+.symptom-page__chat-area {
+  flex: 1;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 0.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+/* Empty state shown when no messages yet */
+.symptom-page__empty-state {
+  text-align: center;
+  color: #9ca3af;
+  margin-top: 60px;
+  font-size: 14px;
+}
+
+.symptom-page__empty-state-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+/* Typing indicator — shown while API call is in progress */
+.symptom-page__typing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* Error banner */
+.symptom-page__error {
+  padding: 8px 14px;
+  background: #fdecea;
+  color: #a32d2d;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}

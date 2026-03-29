@@ -1,0 +1,229 @@
+/* ============================================================
+   FILE: ChatMessage.css
+
+   CLASS INVENTORY — every class used in ChatMessage.jsx:
+   .chat-message                   → outer flex row wrapper
+   .chat-message--user             → modifier: right-align (user)
+   .chat-message--ai               → modifier: left-align  (AI)
+   .chat-message__avatar           → round avatar circle
+   .chat-message__avatar--ai       → AI avatar (blue bg)
+   .chat-message__avatar--user     → user avatar (grey bg)
+   .chat-message__bubble           → the speech bubble card
+   .chat-message__bubble--user     → user bubble (blue bg)
+   .chat-message__bubble--ai       → AI bubble (white card)
+   .chat-message__chip-label       → "Symptoms analyzed:" small text
+   .chat-message__chips            → flex row of chips
+   .chat-message__chip             → one symptom pill inside user bubble
+   .chat-message__severity         → severity badge (inline styled)
+   .chat-message__cache-badge      → ⚡ cached inline badge
+   .chat-message__advice           → AI advice paragraph
+   .chat-message__action-box       → suggested action highlighted box
+   .chat-message__save-btn         → 💾 Save button
+   .chat-message__saved-text       → ✓ Saved confirmation text
+   .chat-message__disclaimer       → ⚕️ footer disclaimer
+   ============================================================ */
+
+
+/* ──────────────────────────────────────────────────────────
+   OUTER WRAPPER
+   ────────────────────────────────────────────────────────── */
+
+.chat-message {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+  animation: cm-fadeIn 0.22s ease;
+}
+
+@keyframes cm-fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* User: avatar on right, bubble to its left */
+.chat-message--user {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+/* AI: avatar on left, bubble to its right */
+.chat-message--ai {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+
+/* ──────────────────────────────────────────────────────────
+   AVATARS
+   ────────────────────────────────────────────────────────── */
+
+.chat-message__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.chat-message__avatar--ai   { background: #dbeafe; }
+.chat-message__avatar--user { background: #e2e8f0; }
+
+
+/* ──────────────────────────────────────────────────────────
+   BUBBLE BASE
+   ────────────────────────────────────────────────────────── */
+
+.chat-message__bubble {
+  max-width: 68%;
+  padding: 13px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* USER bubble: solid blue */
+.chat-message__bubble--user {
+  background: #1d4ed8;
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+
+/* AI bubble: white card */
+.chat-message__bubble--ai {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+
+/* ──────────────────────────────────────────────────────────
+   USER BUBBLE INTERNALS
+   ────────────────────────────────────────────────────────── */
+
+/* "Symptoms analyzed:" label */
+.chat-message__chip-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+  margin-bottom: 8px;
+}
+
+/* Row of symptom pills */
+.chat-message__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* One symptom pill */
+.chat-message__chip {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* ──────────────────────────────────────────────────────────
+   AI BUBBLE INTERNALS
+   ────────────────────────────────────────────────────────── */
+
+/* Severity badge
+   background / border / color come from SEVERITY_STYLES inline style.
+   This class only handles layout / shape. */
+.chat-message__severity {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+/* ⚡ cached badge — sits inline next to severity text */
+.chat-message__cache-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #fef9c3;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 8px;
+  border: 1px solid #fde68a;
+}
+
+/* Main AI advice paragraph */
+.chat-message__advice {
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.75;
+  margin: 0 0 12px 0;
+  white-space: pre-wrap;   /* preserves \n line breaks from AI text */
+}
+
+/* Suggested action box */
+.chat-message__action-box {
+  font-size: 13px;
+  color: #1e3a5f;
+  background: #f0f7ff;
+  border-left: 3px solid #1d4ed8;
+  border-radius: 0 8px 8px 0;
+  padding: 9px 13px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* 💾 Save button */
+.chat-message__save-btn {
+  display: inline-block;
+  padding: 7px 16px;
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.chat-message__save-btn:hover {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+/* ✓ Saved text (replaces button once saved) */
+.chat-message__saved-text {
+  font-size: 13px;
+  color: #15803d;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+}
+
+/* ⚕️ Disclaimer footer */
+.chat-message__disclaimer {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 8px 0 0 0;
+  font-style: italic;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 8px;
+}
