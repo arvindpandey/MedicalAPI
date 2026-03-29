@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MedicalAPI.Interface;
+using MedicalAPI.Model;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MedicalAPI.Controller
 {
@@ -7,5 +11,6 @@ namespace MedicalAPI.Controller
     [ApiController]
     public class SymptomController : ControllerBase
     {
+         
     }
 }

@@ -1,5 +1,7 @@
 ﻿using MedicalAPI.BusinessLogic;
+using MedicalAPI.Interface;
 using MedicalAPI.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,19 +11,26 @@ namespace MedicalAPI.Controller
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationBL authenticationBL; 
+        private readonly IUserService _userService;
 
-        public AuthenticationController(IAuthenticationBL _authenticationBL)
+        public AuthenticationController(IUserService userService)
         {
-            authenticationBL = _authenticationBL;
+            _userService = userService;
         }
         [HttpPost]
-        public async Task<IActionResult> Login(AuthenticationRequestModel authenticationRequestModel)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
-            AuthenticationResponseModel objeAuthResponse = new AuthenticationResponseModel();
-            objeAuthResponse = await authenticationBL.Login(authenticationRequestModel);
-
-            return Ok (objeAuthResponse);
+            try
+            {
+                var result = await _userService.LoginAsync(loginDTO);
+                return Ok(result);
+            }
+            catch (System.UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
         }
     }
+    
 }
